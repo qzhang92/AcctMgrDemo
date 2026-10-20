@@ -1,17 +1,24 @@
 # Contoso Account Services
 
-A single-page, static customer account detail demo for Northstar Manufacturing.
-The existing LisbonDemo is unchanged.
+A connected account-management demo with **20 static pages**, including the
+original Northstar account overview. No dependencies, build step, external
+assets, backend, or live data connections.
 
 ## Run locally
 
-Requires Node.js; no dependencies or build step.
+Requires Node.js.
 
 ```powershell
 node .\server.mjs
 ```
 
-Open http://127.0.0.1:4174. To choose another port:
+Open <http://127.0.0.1:4174/#/Pages/01>. Page routes use two-digit identifiers
+from `01` through `20`. The root URL opens page `01`. Each route supports direct
+links, refresh, and browser back/forward navigation. The original `#overview`,
+`#renewal`, `#stakeholders`, and `#documents` bookmarks redirect to the
+corresponding new pages.
+
+To choose another port:
 
 ```powershell
 $env:PORT = 4180
@@ -20,35 +27,118 @@ node .\server.mjs
 
 The server binds only to the local computer. Stop it with Ctrl+C.
 
-## Page contents
+## Pages
 
-- Account overview, current base, seats, optional expansion, and dated milestones.
-- Proposed 2027 renewal, open actions, and expandable service scope.
-- Role-based stakeholders and links to the four original workspace documents.
-- Responsive desktop/mobile layouts and a print-friendly account brief.
+| Route | Page |
+|-------|------|
+| [01](http://127.0.0.1:4174/#/Pages/01) | Account Manager Home |
+| [02](http://127.0.0.1:4174/#/Pages/02) | Account Portfolio |
+| [03](http://127.0.0.1:4174/#/Pages/03) | Customer Account Overview |
+| [04](http://127.0.0.1:4174/#/Pages/04) | Customer Health Dashboard |
+| [05](http://127.0.0.1:4174/#/Pages/05) | Renewal Pipeline |
+| [06](http://127.0.0.1:4174/#/Pages/06) | Renewal Detail |
+| [07](http://127.0.0.1:4174/#/Pages/07) | Expansion Opportunities |
+| [08](http://127.0.0.1:4174/#/Pages/08) | Opportunity Detail |
+| [09](http://127.0.0.1:4174/#/Pages/09) | Contract & Agreement Library |
+| [10](http://127.0.0.1:4174/#/Pages/10) | Contract Review Workspace |
+| [11](http://127.0.0.1:4174/#/Pages/11) | Stakeholder Directory |
+| [12](http://127.0.0.1:4174/#/Pages/12) | Account Relationship Map |
+| [13](http://127.0.0.1:4174/#/Pages/13) | Meeting Preparation Brief |
+| [14](http://127.0.0.1:4174/#/Pages/14) | Meeting Summary & Actions |
+| [15](http://127.0.0.1:4174/#/Pages/15) | Task & Follow-up Center |
+| [16](http://127.0.0.1:4174/#/Pages/16) | Service Delivery Overview |
+| [17](http://127.0.0.1:4174/#/Pages/17) | Support & Escalations |
+| [18](http://127.0.0.1:4174/#/Pages/18) | Revenue & Billing Overview |
+| [19](http://127.0.0.1:4174/#/Pages/19) | Quarterly Business Review |
+| [20](http://127.0.0.1:4174/#/Pages/20) | Leadership Portfolio Readout |
 
-Section navigation and the scope disclosure work without JavaScript. JavaScript
-only enables the Print brief button. There is no backend, authentication,
-live account data, or workflow mutation.
+## Structure and interactions
+
+- [index.html](index.html) provides the shared shell.
+- [app.js](app.js) manages hash routing, navigation, printing, and local filters.
+- [Pages/](Pages/) contains 20 HTML content fragments, loaded into the shell.
+  These fragments are not standalone styled documents; use the routes above.
+- [styles.css](styles.css) preserves the original visual language;
+  [pages.css](pages.css) adds shared layouts and responsive navigation.
+
+Desktop navigation lists all 20 pages. On mobile, use **Browse 20 pages**.
+Each page includes previous/next navigation and a print button. Search and
+category filters combine, show result counts and empty states, and can be reset.
+Filters reset when navigating to another page. Scope disclosures use native
+HTML details elements.
+
+JavaScript and an HTTP server are required for routing and filters; opening
+the shell directly as a local file is not supported. There are no simulated
+saves, approvals, ticket updates, invitations, or signatures. Unknown routes
+and failed page requests show explicit errors.
 
 ## Source data and boundaries
 
-The snapshot is dated **20 October 2026**, not the viewer's current date. Content
-is based on the renewal agreement, portfolio workbook, and leadership readout
-in `demo files`. The daily brief PDF is linked as a supporting document, not
-used as a source for page metrics. The top-level demo script was not readable
-as an ordinary Office document and was not used.
+The snapshot is fixed at **20 October 2026**.
 
-All account data is fictional. The $480,000 current annual base is distinct from
-an executed renewal; the $120,000 expansion is optional and requires a signed
-change order. The 10% service-credit cap is a proposed position, not an approval.
-Customer confirmation on 22 October and the internal checkpoint on 23 October
-are separate milestones. Stakeholders are roles, not actual people.
+### Original Northstar demo facts
+
+The original page's commercial facts carry forward from the renewal agreement,
+portfolio workbook, and leadership readout in `demo_files`. The daily brief PDF
+is linked as supporting material, not used for page metrics. The top-level demo
+script was not readable as an ordinary Office document and was not used.
+
+- Current annual base: **$480,000**, covering **2,000 seats**.
+- Optional expansion: **500 seats / $120,000 full-year value**, requiring a
+  separate signed change order.
+- Proposed 2027 billing: **$120,000 quarterly / net 30**.
+- Proposed service-credit cap: **up to 10% of the affected month's recurring
+  fee**, not an approval.
+- Customer confirmation target: **22 October**. Internal checkpoint:
+  **23 October**. These are separate milestones.
+- Proposed availability target: **99.9% monthly**, not actual measured uptime.
+- The renewal is unsigned and the service lead is unassigned.
+
+### Added fictional examples
+
+Alpine Retail, Harbor Healthcare, and Meridian Logistics and their commercial
+records were added for this collection. All health scores, adoption percentages,
+support cases, invoices, meeting records, and discovery narratives are fictional,
+not extracted from the original documents or connected systems. Each page
+discloses its data boundary. Stakeholders are roles, not real people.
+
+| Account | Annual base | Seats | Health | Adoption | Optional annual expansion |
+|---------|------------:|------:|-------:|---------:|--------------------------:|
+| Northstar | $480,000 | 2,000 | 68 | 82% | $120,000 / 500 seats |
+| Alpine | $288,000 | 1,200 | 91 | 94% | $48,000 / 200 seats |
+| Harbor | $360,000 | 1,500 | 54 | 71% | None |
+| Meridian | $192,000 | 800 | 86 | 90% | $24,000 / 100 seats |
+| **Total** | **$1,320,000** | **5,500** | | | **$192,000 / 800 seats** |
+
+Current annual base, unsigned renewal pipeline, and optional expansion are
+distinct. No optional expansion is committed. Northstar plus Harbor account for
+$840,000 (63.6%) of base needing attention, not projected loss. The illustrative
+invoice subset totals $282,000 issued, $192,000 paid, and $90,000 overdue.
+Portfolio health and adoption averages are unweighted means, rounded for display.
+All financial values are USD, excluding tax.
+
+## Validation
+
+Run the dependency-free structural checks:
+
+```powershell
+node --check .\app.js
+node --test .\tests\demo.test.mjs
+```
+
+For browser validation, check all 20 routes at desktop and mobile widths,
+navigation history, direct refresh, mobile menu, combined search/category
+filters, empty/reset states, scope disclosures, print layout, and unknown routes.
+Document URLs can be checked with HTTP HEAD to avoid downloading large files.
 
 ## Static hosting
 
-Publish `index.html`, `styles.css`, and `app.js` together, preserving the
-`demo files` directory and filenames if document links should remain available.
-No external fonts, images, libraries, or services are required. The Office
-documents are approximately 202-242 MiB each; check host file-size limits before
-publishing. The page does not download documents until a link is selected.
+Publish `index.html`, `styles.css`, `pages.css`, `app.js`, and the entire `Pages`
+directory together. Preserve `demo_files` and the four original filenames if
+document downloads should remain available. That directory is ignored by Git,
+so copy it separately when deploying; it is not included in a clone.
+
+Hash routing requires no server-side route rewrites. No external fonts, images,
+libraries, or services are required. The Office documents are approximately
+202-242 MiB each; check host file-size limits. Documents are not fetched until
+a user selects a document link.
