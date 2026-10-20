@@ -3,36 +3,37 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A connected, fictional account-management demo with 20 static pages.">
+  <meta name="description" content="Twenty distinct account-management demo pages with fictional data.">
   <meta name="color-scheme" content="light">
-  <title>Contoso Account Services</title>
+  <title>Account Manager Home</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%232d6457'/%3E%3Cpath d='M28 13a11 11 0 1 0 0 14' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="pages.css">
+  <link rel="stylesheet" href="identities.css">
   <script src="app.js" defer></script>
 </head>
 <body class="demo-app">
   <a class="skip-link" href="#main">Skip to page content</a>
-  <aside class="sidebar" aria-label="Workspace">
-    <a class="brand" href="#/Pages/01" aria-label="Contoso Account Services home">
-      <span class="brand-mark">c<span></span></span>
-      <span>contoso<span class="brand-caption">ACCOUNT SERVICES</span></span>
-    </a>
-    <button class="button nav-toggle" type="button" aria-expanded="false" aria-controls="workspace-nav" hidden>Browse 20 pages</button>
+  <div class="demo-toolbar">
+    <span>ACCOUNT MANAGEMENT <span class="collection-label">/ DESIGN COLLECTION</span></span>
+    <button class="button nav-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="page-directory" hidden>Browse 20 pages</button>
+  </div>
+  <dialog id="page-directory" class="page-directory" aria-labelledby="directory-title">
+    <div class="directory-heading"><div><span class="eyebrow">20 PAGES / 20 PERSPECTIVES</span><h2 id="directory-title">Choose a page</h2></div><button class="button button-secondary" type="button" data-close-directory>Close directory</button></div>
     <nav id="workspace-nav" class="workspace-nav" aria-label="Demo pages"></nav>
-    <div class="workspace-footer"><span class="demo-dot"></span> FICTIONAL DEMO<span>20 pages. One connected workspace.</span></div>
-  </aside>
+    <p class="directory-note">Independent visual identities. Shared fictional account-management scenarios.</p>
+  </dialog>
   <div class="page">
-    <header class="topbar">
-      <div class="breadcrumbs"><a href="#/Pages/01">Workspace</a><span class="breadcrumb-divider">/</span><span id="breadcrumb-title">Account Services</span></div>
-      <div class="topbar-meta"><span class="snapshot-dot"></span>Snapshot: 20 Oct 2026<span class="demo-badge">Fictional demo</span></div>
+    <header class="page-masthead">
+      <div class="identity-lockup"><span id="identity-mark" aria-hidden="true">D.</span><div><span id="page-wordmark">daybook.</span><span id="page-edition">THE ACCOUNT MANAGER'S DAILY EDITION</span></div></div>
+      <div class="masthead-meta"><span id="breadcrumb-title">Account Manager Home</span><span>20 OCT 2026 / FICTIONAL DEMO</span></div>
     </header>
     <main id="main" tabindex="-1" aria-busy="true">
       <div class="card loading-state" role="status">Loading your workspace...</div>
       <noscript><p>This demo uses JavaScript for navigation. Enable JavaScript, or browse the static HTML content in the Pages directory.</p></noscript>
     </main>
     <nav class="page-pager" aria-label="Previous and next demo page" hidden></nav>
-    <footer class="app-footer"><span>contoso / Account Services</span><span>Fictional demonstration data &middot; Snapshot: 20 October 2026 &middot; USD, excluding tax</span></footer>
+    <footer class="app-footer"><span id="footer-identity">daybook.</span><span>Fictional demonstration data &middot; Snapshot: 20 October 2026 &middot; USD, excluding tax</span></footer>
     <div id="route-status" class="sr-only" role="status" aria-live="polite"></div>
   </div>
 </body>

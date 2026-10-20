@@ -11,12 +11,34 @@ const files = await Promise.all(ids.map(async (id) => ({
   html: await readFile(resolve(root, "Pages", `${id}.html`), "utf8"),
 })));
 const app = await readFile(resolve(root, "app.js"), "utf8");
+const identityCss = await readFile(resolve(root, "identities.css"), "utf8");
 
 test("exactly 20 static page fragments match the route registry", async () => {
   const names = (await readdir(resolve(root, "Pages"))).filter((name) => name.endsWith(".html")).sort();
   assert.deepEqual(names, ids.map((id) => `${id}.html`));
   const registry = [...app.matchAll(/^\s+\["(\d{2})",/gm)].map((match) => match[1]);
   assert.deepEqual(registry, ids);
+});
+
+test("every page has its own identity and scoped visual treatment", () => {
+  const identities = [...app.matchAll(/^\s+"(\d{2})": \{ wordmark: "([^"]+)"/gm)];
+  assert.deepEqual(identities.map((match) => match[1]), ids);
+  assert.equal(new Set(identities.map((match) => match[2])).size, 20);
+  for (const id of ids) {
+    assert.ok(identityCss.includes(`body[data-page="${id}"]`), `Missing identity for page ${id}`);
+  }
+  assert.doesNotMatch(identityCss, /@import|https?:\/\//, "Visual identities must not require remote fonts or assets");
+});
+
+test("page titles have no shared suffix and the directory is an accessible optional dialog", async () => {
+  const shell = await readFile(resolve(root, "index.html"), "utf8");
+  assert.match(app, /document\.title = title;/);
+  assert.doesNotMatch(app, /\| Contoso Account Services/);
+  assert.match(shell, /<link rel="stylesheet" href="identities\.css">/);
+  assert.match(shell, /<dialog[^>]+id="page-directory"[^>]+aria-labelledby="directory-title"/);
+  assert.match(shell, /aria-haspopup="dialog"[^>]+aria-expanded="false"[^>]+aria-controls="page-directory"/);
+  assert.match(app, /directory\.showModal\(\)/);
+  assert.match(app, /directory\.addEventListener\("close"/);
 });
 
 for (const { id, html } of files) {

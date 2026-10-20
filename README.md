@@ -1,8 +1,9 @@
 # Contoso Account Services
 
-A connected account-management demo with **20 static pages**, including the
-original Northstar account overview. No dependencies, build step, external
-assets, backend, or live data connections.
+An account-management demo with **20 visually distinct static pages**, including
+the original Northstar account overview. Each page has its own masthead,
+typography, palette, and layout. No dependencies, build step, external assets,
+backend, or live data connections.
 
 ## Run locally
 
@@ -29,39 +30,48 @@ The server binds only to the local computer. Stop it with Ctrl+C.
 
 ## Pages
 
-| Route | Page |
-|-------|------|
-| [01](http://127.0.0.1:4174/#/Pages/01) | Account Manager Home |
-| [02](http://127.0.0.1:4174/#/Pages/02) | Account Portfolio |
-| [03](http://127.0.0.1:4174/#/Pages/03) | Customer Account Overview |
-| [04](http://127.0.0.1:4174/#/Pages/04) | Customer Health Dashboard |
-| [05](http://127.0.0.1:4174/#/Pages/05) | Renewal Pipeline |
-| [06](http://127.0.0.1:4174/#/Pages/06) | Renewal Detail |
-| [07](http://127.0.0.1:4174/#/Pages/07) | Expansion Opportunities |
-| [08](http://127.0.0.1:4174/#/Pages/08) | Opportunity Detail |
-| [09](http://127.0.0.1:4174/#/Pages/09) | Contract & Agreement Library |
-| [10](http://127.0.0.1:4174/#/Pages/10) | Contract Review Workspace |
-| [11](http://127.0.0.1:4174/#/Pages/11) | Stakeholder Directory |
-| [12](http://127.0.0.1:4174/#/Pages/12) | Account Relationship Map |
-| [13](http://127.0.0.1:4174/#/Pages/13) | Meeting Preparation Brief |
-| [14](http://127.0.0.1:4174/#/Pages/14) | Meeting Summary & Actions |
-| [15](http://127.0.0.1:4174/#/Pages/15) | Task & Follow-up Center |
-| [16](http://127.0.0.1:4174/#/Pages/16) | Service Delivery Overview |
-| [17](http://127.0.0.1:4174/#/Pages/17) | Support & Escalations |
-| [18](http://127.0.0.1:4174/#/Pages/18) | Revenue & Billing Overview |
-| [19](http://127.0.0.1:4174/#/Pages/19) | Quarterly Business Review |
-| [20](http://127.0.0.1:4174/#/Pages/20) | Leadership Portfolio Readout |
+| Route | Page | Visual identity |
+|-------|------|-----------------|
+| [01](http://127.0.0.1:4174/#/Pages/01) | Account Manager Home | daybook. / Warm editorial daily planner |
+| [02](http://127.0.0.1:4174/#/Pages/02) | Account Portfolio | ATLAS / Cobalt index with a numerical side rail |
+| [03](http://127.0.0.1:4174/#/Pages/03) | Customer Account Overview | NORTHSTAR / Industrial profile with an oversized dark hero |
+| [04](http://127.0.0.1:4174/#/Pages/04) | Customer Health Dashboard | pulse / Clinical teal scorecards and rounded surfaces |
+| [05](http://127.0.0.1:4174/#/Pages/05) | Renewal Pipeline | flow / Purple dot-grid kanban studio |
+| [06](http://127.0.0.1:4174/#/Pages/06) | Renewal Detail | Renewal Dossier / Centered serif commercial document |
+| [07](http://127.0.0.1:4174/#/Pages/07) | Expansion Opportunities | UPSIDE / Bold magenta opportunity exchange |
+| [08](http://127.0.0.1:4174/#/Pages/08) | Opportunity Detail | PLUS / 500 / Asymmetric burnt-orange business case |
+| [09](http://127.0.0.1:4174/#/Pages/09) | Contract & Agreement Library | The Vault / Archive catalogue with file-spine cards |
+| [10](http://127.0.0.1:4174/#/Pages/10) | Contract Review Workspace | CLAUSE / Burgundy legal proof and square annotations |
+| [11](http://127.0.0.1:4174/#/Pages/11) | Stakeholder Directory | people & partners / Warm, three-column profile directory |
+| [12](http://127.0.0.1:4174/#/Pages/12) | Account Relationship Map | ORBIT / Dark relationship canvas with orbital nodes |
+| [13](http://127.0.0.1:4174/#/Pages/13) | Meeting Preparation Brief | NEXT / Yellow meeting ticket and timed agenda |
+| [14](http://127.0.0.1:4174/#/Pages/14) | Meeting Summary & Actions | Fieldnotes / Ruled notebook with a red margin |
+| [15](http://127.0.0.1:4174/#/Pages/15) | Task & Follow-up Center | ACTION / DESK / Compact task register with an orange rail |
+| [16](http://127.0.0.1:4174/#/Pages/16) | Service Delivery Overview | SERVICE GRID / Engineering blueprint and milestone track |
+| [17](http://127.0.0.1:4174/#/Pages/17) | Support & Escalations | SIGNAL / Red incident desk and alert banner |
+| [18](http://127.0.0.1:4174/#/Pages/18) | Revenue & Billing Overview | LEDGER / Mint financial ledger and tabular numerals |
+| [19](http://127.0.0.1:4174/#/Pages/19) | Quarterly Business Review | Northstar Review / Large-format editorial journal |
+| [20](http://127.0.0.1:4174/#/Pages/20) | Leadership Portfolio Readout | BOARDROOM / Navy-and-gold executive briefing |
 
 ## Structure and interactions
 
-- [index.html](index.html) provides the shared shell.
+- [index.html](index.html) provides the page host and optional page directory.
 - [app.js](app.js) manages hash routing, navigation, printing, and local filters.
 - [Pages/](Pages/) contains 20 HTML content fragments, loaded into the shell.
   These fragments are not standalone styled documents; use the routes above.
 - [styles.css](styles.css) preserves the original visual language;
-  [pages.css](pages.css) adds shared layouts and responsive navigation.
+  [pages.css](pages.css) adds reusable content layouts;
+  [identities.css](identities.css) supplies 20 scoped designs and responsive/print
+  adaptations. The active route sets `body[data-page]`; switching pages replaces
+  that identity rather than accumulating themes.
 
-Desktop navigation lists all 20 pages. On mobile, use **Browse 20 pages**.
+Use **Browse 20 pages** to open a modal directory on desktop or mobile. Close it
+with its button or Escape; keyboard focus returns to the opener. There is no
+persistent sidebar. Each page can be opened directly and has its own short
+browser title, without a shared company suffix. Visual identities are inspired
+by the variety of layouts in the supplied LisbonDemo reference; they do not
+import its styles, assets, or external fonts.
+
 Each page includes previous/next navigation and a print button. Search and
 category filters combine, show result counts and empty states, and can be reset.
 Filters reset when navigating to another page. Scope disclosures use native
@@ -127,14 +137,15 @@ node --test .\tests\demo.test.mjs
 ```
 
 For browser validation, check all 20 routes at desktop and mobile widths,
-navigation history, direct refresh, mobile menu, combined search/category
+exact browser titles, independent mastheads and layouts, navigation history,
+direct refresh, the directory's keyboard/focus behavior, combined search/category
 filters, empty/reset states, scope disclosures, print layout, and unknown routes.
 Document URLs can be checked with HTTP HEAD to avoid downloading large files.
 
 ## Static hosting
 
-Publish `index.html`, `styles.css`, `pages.css`, `app.js`, and the entire `Pages`
-directory together. Preserve `demo_files` and the four original filenames if
+Publish `index.html`, `styles.css`, `pages.css`, `identities.css`, `app.js`, and
+the entire `Pages` directory together. Preserve `demo_files` and the four original filenames if
 document downloads should remain available. That directory is ignored by Git,
 so copy it separately when deploying; it is not included in a clone.
 

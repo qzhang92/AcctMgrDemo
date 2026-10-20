@@ -25,6 +25,29 @@ const main = document.querySelector("#main");
 const nav = document.querySelector("#workspace-nav");
 const pager = document.querySelector(".page-pager");
 const toggle = document.querySelector(".nav-toggle");
+const directory = document.querySelector("#page-directory");
+const identities = {
+  "01": { wordmark: "daybook.", edition: "THE ACCOUNT MANAGER'S DAILY EDITION", mark: "D." },
+  "02": { wordmark: "ATLAS", edition: "ACCOUNT PORTFOLIO / INTELLIGENCE INDEX", mark: "A" },
+  "03": { wordmark: "NORTHSTAR", edition: "MANUFACTURING / ACCOUNT PROFILE", mark: "N+" },
+  "04": { wordmark: "pulse", edition: "CUSTOMER HEALTH OBSERVATORY", mark: "+" },
+  "05": { wordmark: "flow", edition: "THE RENEWAL STUDIO", mark: "f" },
+  "06": { wordmark: "Renewal Dossier", edition: "NORTHSTAR / COMMERCIAL RECORD 2027", mark: "R" },
+  "07": { wordmark: "UPSIDE", edition: "THE OPPORTUNITY EXCHANGE", mark: "UP" },
+  "08": { wordmark: "PLUS / 500", edition: "NORTHSTAR CAPACITY / BUSINESS CASE", mark: "+" },
+  "09": { wordmark: "The Vault", edition: "ACCOUNT DOCUMENTS / REFERENCE COLLECTION", mark: "V" },
+  "10": { wordmark: "CLAUSE", edition: "LEGAL REVIEW / WORKING PAPERS", mark: "C" },
+  "11": { wordmark: "people & partners", edition: "THE STAKEHOLDER DIRECTORY", mark: "&" },
+  "12": { wordmark: "ORBIT", edition: "RELATIONSHIP INTELLIGENCE / NORTHSTAR", mark: "O" },
+  "13": { wordmark: "NEXT", edition: "MEETING PLANNER / 22 OCTOBER", mark: "22" },
+  "14": { wordmark: "Fieldnotes", edition: "THE INTERNAL CONVERSATION RECORD", mark: "fn" },
+  "15": { wordmark: "ACTION / DESK", edition: "FOLLOW-UPS / OWNERS / CHECKPOINTS", mark: "A/" },
+  "16": { wordmark: "SERVICE GRID", edition: "DELIVERY ENGINEERING / READINESS", mark: "SG" },
+  "17": { wordmark: "SIGNAL", edition: "CUSTOMER SUPPORT / INCIDENT DESK", mark: "!" },
+  "18": { wordmark: "LEDGER", edition: "SERVICE VALUE & BILLING / FINANCE", mark: "L" },
+  "19": { wordmark: "Northstar Review", edition: "THE QUARTERLY BUSINESS EDITION / Q4", mark: "Q4" },
+  "20": { wordmark: "BOARDROOM", edition: "PORTFOLIO STRATEGY / EXECUTIVE BRIEF", mark: "B" },
+};
 let currentRequest;
 let firstRender = true;
 
@@ -45,9 +68,14 @@ for (const group of new Set(pages.map((page) => page[2]))) {
 
 toggle.hidden = false;
 toggle.addEventListener("click", () => {
-  const open = toggle.getAttribute("aria-expanded") !== "true";
-  toggle.setAttribute("aria-expanded", String(open));
-  nav.classList.toggle("is-open", open);
+  directory.showModal();
+  toggle.setAttribute("aria-expanded", "true");
+  nav.querySelector('[aria-current="page"]')?.scrollIntoView({ block: "nearest" });
+});
+document.querySelector("[data-close-directory]").addEventListener("click", () => directory.close());
+directory.addEventListener("close", () => {
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.focus({ preventScroll: true });
 });
 
 document.querySelector(".skip-link").addEventListener("click", (event) => {
@@ -114,8 +142,9 @@ async function renderRoute() {
   currentRequest = request;
   const match = /^#\/Pages\/(\d{2})\/?$/.exec(location.hash);
   const index = match ? pages.findIndex(([id]) => id === match[1]) : -1;
-  nav.classList.remove("is-open");
+  if (directory.open) directory.close();
   toggle.setAttribute("aria-expanded", "false");
+  document.body.dataset.page = index >= 0 ? pages[index][0] : "error";
   for (const link of nav.querySelectorAll("a")) {
     const active = index >= 0 && link.hash === `#/Pages/${pages[index][0]}`;
     link.classList.toggle("active", active);
@@ -135,7 +164,12 @@ async function renderRoute() {
     main.innerHTML = html;
     const heading = main.querySelector("h1");
     if (!heading) throw new Error(`Page ${id} is missing its heading.`);
-    document.title = `${title} | Contoso Account Services`;
+    document.title = title;
+    const identity = identities[id];
+    document.querySelector("#page-wordmark").textContent = identity.wordmark;
+    document.querySelector("#page-edition").textContent = identity.edition;
+    document.querySelector("#identity-mark").textContent = identity.mark;
+    document.querySelector("#footer-identity").textContent = identity.wordmark;
     document.querySelector("#breadcrumb-title").textContent = title;
     const description = document.createElement("p");
     description.className = "page-description";
@@ -149,7 +183,12 @@ async function renderRoute() {
   } catch (error) {
     if (request.signal.aborted) return;
     console.error("Page navigation failed:", error);
-    document.title = "Page unavailable | Contoso Account Services";
+    document.body.dataset.page = "error";
+    document.title = "Page unavailable";
+    document.querySelector("#page-wordmark").textContent = "Page unavailable";
+    document.querySelector("#page-edition").textContent = "NAVIGATION ERROR";
+    document.querySelector("#identity-mark").textContent = "!";
+    document.querySelector("#footer-identity").textContent = "Account management demo";
     document.querySelector("#breadcrumb-title").textContent = "Page unavailable";
     main.innerHTML = '<section class="card error-state"><span class="eyebrow">NAVIGATION ERROR</span><h1>Page unavailable</h1><p></p><a class="button button-primary" href="#/Pages/01">Return to workspace home</a></section>';
     main.querySelector("p").textContent = error instanceof Error ? error.message : "An unexpected navigation error occurred.";
